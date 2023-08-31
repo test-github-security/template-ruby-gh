@@ -1,0 +1,22 @@
+name: test-snyk-sast-workflow
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  build:
+    steps:
+      - name: checkout-source-code
+        uses: cloudbees-io/checkout@v1
+        with:
+          ref: ${{ cloudbees.scm.branch }}
+      - name: Run snyksast
+        uses: cloudbees-io/snyksast@v1.0.0
+        with:
+          orgname: ${{ secrets.SNYK_SAST_ORG_NAME }} # snyk username
+          token: ${{ secrets.SNYK_SAST_TOKEN }} # snyk secret
+          language: "LANGUAGE_RUBY" # language of the repo 
